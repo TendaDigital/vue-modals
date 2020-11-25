@@ -1,8 +1,9 @@
 import Vue from "vue";
-import Demo from '@/Demo.vue'
-import DemoModal from '@/DemoModal.vue'
+import Demo from '@/Demo/Main.vue'
+import '@/Layouts/Drawer.vue'
+import '@/Layouts/Dialog.vue'
 
-Vue.component('DemoModal', DemoModal)
+// Vue.component('Drawer', Drawer)
 
 new Vue({
   render: h => h(Demo)

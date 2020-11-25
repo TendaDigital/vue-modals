@@ -1,3 +1,4 @@
+import { VueConstructor } from 'vue/types/umd'
 import ModalStack from './ModalStack.vue'
 
 export interface ModalOptions {
@@ -58,6 +59,10 @@ export interface ModalResult {
   id: number
   stack: ModalStack
   options: ModalOptions
+  /**
+   * Component that will render the layout
+   */
+  layout: Vue | VueConstructor<Vue> | string
   close(error?: any)
   destroy(error?: any)
 }

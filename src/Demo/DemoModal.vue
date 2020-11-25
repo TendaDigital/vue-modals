@@ -16,11 +16,14 @@
 </template>
 
 <script>
-import Modals from './Modals'
+import Modals from '@/Modals'
 export default {
   name: 'DemoModal',
   props: {
-    width: Number
+    width: {
+      type: Number,
+      default: 500,
+    }
   },
   data() {
     return {
@@ -28,10 +31,12 @@ export default {
     }
   },
   methods: {
-    beforeClose(event) {
+    async beforeClose(event) {
       if (this.preventClosingFlag) {
         event.preventDefault()
-        // await Modals.open({layout: 'dialog', component})
+        if (await Modals.open({layout: 'drawer', component: 'DemoModal', parent: this}) == "Banana") {
+          this.$emit('destroy')
+        }
       }
     },
 

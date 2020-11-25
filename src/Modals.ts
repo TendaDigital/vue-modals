@@ -1,8 +1,7 @@
 import ModalStack from './ModalStack.vue'
+import Drawer from './Layouts/Drawer.vue'
 import { Vue } from 'vue-property-decorator';
 import { ModalOptions } from './Types';
-
-// const globalStackInstances
 
 export default class Modals {
   static globalStackInstances = new Map<string, ModalStack>()
@@ -26,23 +25,26 @@ export default class Modals {
    * If default instance is requested and is not registered, 
    * it creates one and returns.
    */
-  static get(name: string = 'default'): ModalStack {
+  static stack(name: string = 'default'): ModalStack {
     // Create instance if no default one exists
     if (name === 'default' && !this.globalStackInstances.has('default')) {
       return this.createStackInstance('default')
     }
-    return this.globalStackInstances.get(name)
+    if (this.globalStackInstances.has(name)) {
+      return this.globalStackInstances.get(name)
+    }
+    throw new Error(`[VueModals] No stack instance found for name "${name ?? 'default'}". Create a ModalStack instance with this name to use it`)
   }
 
   static open(options: ModalOptions) {
-    let instance = this.get(options.stack) as any
-    if (!instance) {
-      throw new Error(`[VueModals] No stack instance found for name "${options.stack ?? 'default'}". Create a ModalStack instance with this name to use it`)
-    }
-    return instance.push(options)
+    (this.stack(options.stack) as any).push(options)
   }
 
-  static register(name: string, stack: ModalStack) {
+  static registerLayout(name: string, layout: any) {
+    Vue.component(name, layout)
+  }
+
+  static registerStack(name: string, stack: ModalStack) {
     console.warn('register', name, stack)
     if (this.globalStackInstances.has(name)) {
       console.warn(`[VueModals] Multiple instances of ModalStack must have unique names. Duplicate name found for ModalStack "${name}".`)
@@ -51,7 +53,7 @@ export default class Modals {
     }
   }
 
-  static unregister(name: string, stack: ModalStack) {
+  static unregisterStack(name: string, stack: ModalStack) {
     console.warn('unregister', name, stack)
     if (this.globalStackInstances.get(name) == stack) {
       this.globalStackInstances.delete(this.name)

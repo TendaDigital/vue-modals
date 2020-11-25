@@ -1,36 +1,42 @@
 <template>
-  <!-- <aside class="lay-modal-stack" :name="name"> -->
+  <!-- <aside class="vue-modals-stack" :name="name"> -->
     <transition-group
-      tag="aside"
-      class="lay-stack"
+      tag="vue-modals-stack"
+      :stack="name"
       name="modal">
       <template v-for="(modal, index) in stack">
         <div
           v-if="!modal.options.hideOverlay"
           :key="modal.id + '_overlay'"
-          :layout="modal.options.layout || 'drawer'"
-          :id="modal.id"
-          :class="{'lay-overlay': true, above: index == stack.length - 1, below: index < stack.length - 1}"
+          class="vue-modals-overlay"
+          :class="{below: index < stack.length - 1, far: index < stack.length - 4}"
           @click="modal.options.clickToClose !== false && close(modal)"/>
-        <section
+        <component
+          :is="modal.layout"
+          :modal-id="modal.id"
+          :modal="modal"
           :key="modal.id + '_modal'"
-          :layout="modal.options.layout || 'drawer'"
-          :id="modal.id"
-          :class="{'lay-modal': true, above: index == stack.length - 1, below: index < stack.length - 1}"
-          :style="{'--index': index, '--depth': stack.length - index - 1}">
+          class="vue-modals-layout"
+          :stack="stack"
+          :index="index"
+          @close="close(modal, $event)"
+          @destroy="destroy(modal, $event)"
+          @answer="answer(modal, $event)">
           <component
             :ref="modal.id"
             :is="modal.options.component"
             v-bind="modal.options.props"
             @close="close(modal, $event)"
+            @destroy="destroy(modal, $event)"
             @answer="answer(modal, $event)"/>
-        </section>
+        </component>
       </template>
     </transition-group>
   <!-- </aside> -->
 </template>
 
 <script lang="ts">
+import { VueConstructor } from 'vue';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import Modals from './Modals';
 import { Modal, ModalOptions } from './Types'
@@ -42,11 +48,18 @@ const SymbolFulfilled = Symbol('Fulfilled')
 
 @Component
 export default class ModalStack extends Vue {
+  
   @Prop({
     type: String,
     default: 'default',
   })
   readonly name: string;
+
+  @Prop({
+    type: String,
+    default: 'drawer',
+  })
+  readonly layout: string;
 
   /**
    * List of modals in sequence. Last one is top most modal
@@ -55,18 +68,18 @@ export default class ModalStack extends Vue {
 
   created() {
     // Register instance
-    Modals.register(this.name, this)
+    Modals.registerStack(this.name, this)
   }
 
   beforeDestroy() {
     // Unregister instance
-    Modals.unregister(this.name, this)
+    Modals.unregisterStack(this.name, this)
   }
 
   @Watch('name')
   onNameChanged(newName, oldName) {
-    oldName && Modals.unregister(oldName, this)
-    newName && Modals.register(newName, this)
+    oldName && Modals.unregisterStack(oldName, this)
+    newName && Modals.registerStack(newName, this)
   }
 
   /**
@@ -107,6 +120,18 @@ export default class ModalStack extends Vue {
 
     this.destroy(modal, error)
     return true
+  }
+
+  /**
+   * Returns the correct component for the modal
+   */
+  layoutForModal(modal: Modal): string | Vue | VueConstructor<Vue> {
+    let componentName = modal.layout ?? modal.options.layout ?? this.layout ?? 'section'
+    if (typeof componentName === 'string') {
+      let component = Vue.component(componentName)
+      if (component) return component
+    }
+    return componentName
   }
 
   canClose(modal: Modal): boolean {
@@ -202,18 +227,25 @@ export default class ModalStack extends Vue {
     if (!options.layout && options.component?.layout) {
       options.layout = options.component.layout
     }
+    // modal.layoutComponent = Modals.layout(options.layout)
 
-    // Listen to parent element destroy hook
+    // Listen to parent element destroy hook in order to destroy the modal too
     if (options.parent) {
       options.parent.$once('hook:beforeDestroy', () => this.destroy(modal, new Error('Component was destroyed')))
     }
 
+    // Add bindings for future integrations
     modal.id = globalId++
     modal.stack = this
     modal.options = options
+    modal.layout = this.layoutForModal(modal)
+
+    // Internal properties to track promise
     modal[SymbolReject] = reject
     modal[SymbolResolve] = resolve
     modal[SymbolFulfilled] = false
+
+    // Expose methods for closing and destroying modal
     modal.close = (error) => this.close(modal, error)
     modal.destroy = (error) => this.destroy(modal, error)
     
@@ -223,53 +255,32 @@ export default class ModalStack extends Vue {
 </script>
 
 <style lang="scss">
-.lay-modal
+.vue-modals-layout
 {
   section {
     position: relative;
   }
 }
 
-.lay-overlay {
+.vue-modals-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.502);
   opacity: 1;
-  transition: opacity 0.5s linear;
-  // &.modal-enter-active, &.modal-leave-active {
-  // }
+  transition: opacity 0.5s linear, background-color 0.5s linear;
 
   &.below {
-    opacity: 0.5;
+    background-color: rgba(0,0,0,0.251);
+  }
+  &.far {
+    opacity: 0;
   }
 
   &.modal-enter, &.modal-leave-to {
     opacity: 0;
-  }
-}
-
-.lay-modal[layout=drawer] {
-  background: white;
-  // box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  overflow: auto;
-
-  transition: opacity .5s, transform .5s ease-in-out;
-  transform: translateX(calc(100vw - 100%));
-
-  &.below {
-    transform: translateX(max(0px,calc(100vw - 100% - 100px * var(--depth) )));
-  }
-
-  &.modal-enter, &.modal-leave-to {
-    transform: translateX(calc(100vw));
   }
 }
 </style>
