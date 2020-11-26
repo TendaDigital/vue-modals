@@ -69,4 +69,4 @@ export default class Modals {
   }
 }
 
-window.Modals = Modals;
+(window as any).Modals = Modals;
