@@ -1,10 +1,15 @@
-import Vue from "vue";
-import Demo from '@/Demo/Main.vue'
-import '@/Layouts/Drawer.vue'
-import '@/Layouts/Dialog.vue'
+import './Layouts/Drawer.vue';
+import './Layouts/Dialog.vue';
+import ModalStack from './ModalStack.vue';
+import Modals from './Modals';
 
-// Vue.component('Drawer', Drawer)
+const VueModals = {
+  install(Vue) {
+    Vue.component('VueModalsStack', ModalStack);
+    Vue.modals = Vue.prototype.$modals = Modals;
+  },
+  Modals,
+  ModalStack
+};
 
-new Vue({
-  render: h => h(Demo)
-}).$mount('#app');
+export default VueModals;
