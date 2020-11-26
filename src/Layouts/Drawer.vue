@@ -43,7 +43,7 @@ section[layout='drawer'] {
   min-width: 300px;
 
   transition: transform 0.4s ease-in-out;
-  transform: translateX(max(0px, calc(100vw - 100% - 100px * var(--depth))));
+  transform: translateX(calc(100vw - 100% - 100px * var(--depth)));
 
   &.modal-enter,
   &.modal-leave-to {
