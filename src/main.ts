@@ -5,7 +5,7 @@ import Modals from './Modals';
 
 const VueModals = {
   install(Vue) {
-    Vue.component('VueModalsStack', ModalStack);
+    Vue.component('vue-modals-stack', ModalStack);
     Vue.modals = Vue.prototype.$modals = Modals;
   },
   Modals,

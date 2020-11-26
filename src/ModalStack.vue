@@ -1,6 +1,6 @@
 <template>
   <!-- <aside class="vue-modals-stack" :name="name"> -->
-  <transition-group tag="vue-modals-stack" :stack="name" name="modal">
+  <transition-group tag="div" :stack="name" name="modal">
     <template v-for="(modal, index) in stack">
       <div
         v-if="!modal.options.hideOverlay"
