@@ -1,6 +1,5 @@
 <template>
   <section layout="drawer" :style="{ '--depth': depth }">
-    {{ depth }}
     <slot></slot>
   </section>
 </template>
