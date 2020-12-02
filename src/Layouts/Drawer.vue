@@ -39,6 +39,7 @@ section[layout='drawer'] {
   left: 0;
   bottom: 0;
   overflow: auto;
+  z-index: 1000;
 
   min-width: 300px;
 
