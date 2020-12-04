@@ -268,7 +268,6 @@ export default class ModalStack extends Vue {
   background-color: rgba(0, 0, 0, 0.502);
   opacity: 1;
   transition: opacity 0.5s linear, background-color 0.5s linear;
-  z-index: 999;
 
   &.below {
     background-color: rgba(0, 0, 0, 0.251);
