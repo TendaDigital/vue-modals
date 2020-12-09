@@ -32,7 +32,6 @@ Vue.component('drawer', LayoutDrawer);
 <style lang="scss">
 section[layout='drawer'] {
   background: white;
-
   position: absolute;
   top: 0;
   left: 0;
@@ -47,6 +46,13 @@ section[layout='drawer'] {
   &.modal-enter,
   &.modal-leave-to {
     transform: translateX(calc(100vw));
+  }
+}
+
+@media (max-width: 768px) {
+  section[layout='drawer'] {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

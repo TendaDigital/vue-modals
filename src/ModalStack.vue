@@ -5,6 +5,7 @@
       <div
         v-if="!modal.options.hideOverlay"
         :key="modal.id + '_overlay'"
+        :style="`z-index: ${1000 + index}`"
         class="vue-modals-overlay"
         :class="{ below: index < stack.length - 1, far: index < stack.length - 4 }"
         @click="modal.options.clickToClose !== false && close(modal)"
@@ -15,6 +16,7 @@
         :modal="modal"
         :key="modal.id + '_modal'"
         class="vue-modals-layout"
+        :style="`z-index: ${1001 + index}`"
         :stack="stack"
         :index="index"
         @close="close(modal, $event)"
@@ -260,6 +262,7 @@ export default class ModalStack extends Vue {
 }
 
 .vue-modals-overlay {
+  overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;

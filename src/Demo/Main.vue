@@ -1,6 +1,6 @@
 <template>
   <section>
-    <dl key="overview" style="position: fixed; z-index: 1000; top: 0; left: 0; bottom: 0;">
+    <dl key="overview" style="position: fixed; z-index: 2000; top: 0; left: 0; bottom: 0;">
       <button @click="push('drawer')">Push Drawer</button>
       <button @click="push('dialog')">Push Dialog</button>
       <button @click="pop()">Pop</button>
