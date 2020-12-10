@@ -14,6 +14,7 @@
         :is="modal.layout"
         :modal-id="modal.id"
         :modal="modal"
+        :showClose="modal.options.showClose"
         :key="modal.id + '_modal'"
         class="vue-modals-layout"
         :style="`z-index: ${1001 + index}`"

@@ -28,6 +28,7 @@ export default class App extends Vue {
       parent: this,
       layout,
       component: DemoModal,
+      showClose: true,
       default: false,
       props: { rand: Math.random() }
     });
