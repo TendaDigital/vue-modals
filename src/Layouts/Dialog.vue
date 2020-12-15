@@ -1,6 +1,6 @@
 <template>
   <section layout="dialog" :class="classes">
-    <div class="header">
+    <div class="header" v-if="showClose">
       <button class="close-button" @click="$emit('close')">×</button>
     </div>
     <div class="content">
@@ -24,6 +24,9 @@ export default class LayoutDialog extends Vue {
 
   @Prop()
   readonly modal: Modal;
+
+  @Prop()
+  readonly showClose: Boolean;
 
   get classes() {
     return { center: true };

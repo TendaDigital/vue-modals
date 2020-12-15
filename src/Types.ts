@@ -41,6 +41,11 @@ export interface ModalOptions {
    */
   default?: any;
 
+  /**
+   * Indicates if the close button should be displayed
+   */
+  showClose?: boolean;
+
   width?: string;
   minWidth?: string;
   maxWidth?: string;
