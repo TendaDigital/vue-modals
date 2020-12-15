@@ -53,6 +53,7 @@ section[layout='drawer'] {
   section[layout='drawer'] {
     width: 100%;
     height: 100%;
+    position: fixed;
   }
 }
 </style>

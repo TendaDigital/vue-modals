@@ -1,6 +1,6 @@
 {
   "name": "@tenda.digital/vue-modals",
-  "version": "1.0.14",
+  "version": "1.0.22",
   "description": "Display Modals as Dialog, Drawers and Notifications programaticaly with a simple api in Vue JS",
   "main": "./dist/vue-modals.common.js",
   "types": "./dist/vue-modals.d.ts",
