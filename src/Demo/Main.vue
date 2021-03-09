@@ -29,7 +29,7 @@ export default class App extends Vue {
       layout,
       component: DemoModal,
       default: false,
-      props: { rand: Math.random(), hideLastDrawer: true }
+      props: { rand: Math.random() }
     });
   }
 
