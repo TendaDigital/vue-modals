@@ -1,43 +1,41 @@
 <template>
   <section layout="dialog" :class="classes">
     <div class="header">
-       <button class="close-button" @click="$emit('close')">×</button>
+      <button class="close-button" @click="$emit('close')">×</button>
     </div>
     <div class="content">
       <slot></slot>
     </div>
-    <div class="footer">
-      
-    </div>
+    <div class="footer"></div>
   </section>
 </template>
 
 <script lang="ts">
 import { Modal } from '@/Types';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class LayoutDialog extends Vue {
   @Prop()
-  readonly stack: Modal[]
+  readonly stack: Modal[];
 
   @Prop()
-  readonly index: number
+  readonly index: number;
 
   @Prop()
-  readonly modal: Modal
+  readonly modal: Modal;
 
   get classes() {
-    return {center: true}
+    return { center: true };
   }
 }
 
 // Register component
-Vue.component('dialog', LayoutDialog)
+Vue.component('dialog', LayoutDialog);
 </script>
 
 <style lang="scss">
-section[layout=dialog] {
+section[layout='dialog'] {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -53,7 +51,7 @@ section[layout=dialog] {
   max-height: calc(100vh - 64px);
   height: min-content;
 
-  transition: transform .3s ease-in-out, opacity .3s linear;
+  transition: transform 0.3s ease-in-out, opacity 0.3s linear;
   opacity: 1;
   transform: translateY(0px) translateX(-50%);
 
@@ -62,7 +60,8 @@ section[layout=dialog] {
     transform: translateY(-50%) translateX(-50%);
   }
 
-  &.modal-enter, &.modal-leave-to {
+  &.modal-enter,
+  &.modal-leave-to {
     transform: translateY(0px) translateX(-50%) scale(0.9);
     opacity: 0;
 
