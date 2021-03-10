@@ -12,34 +12,33 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import DemoModal from '@/Demo/DemoModal.vue'
-import ModalStack from '@/ModalStack.vue'
+import DemoModal from '@/Demo/DemoModal.vue';
+import ModalStack from '@/ModalStack.vue';
 import Modals from '@/Modals';
-import { ModalOptions } from '@/Types';
 
 @Component({
   components: {
     ModalStack,
     DemoModal
-  },
+  }
 })
 export default class App extends Vue {
   push(layout) {
     Modals.stack().push({
       parent: this,
       layout,
-      component: DemoModal, 
-      default: false, 
-      props: {rand: Math.random()}
-    })
+      component: DemoModal,
+      default: false,
+      props: { rand: Math.random() }
+    });
   }
 
   pop() {
-    Modals.stack().pop()
+    Modals.stack().pop();
   }
 
   clear() {
-    Modals.stack().clear()
+    Modals.stack().clear();
   }
 }
 </script>
