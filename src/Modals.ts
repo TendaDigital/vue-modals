@@ -2,8 +2,11 @@ import ModalStack from './ModalStack.vue';
 import { Vue } from 'vue-property-decorator';
 import { ModalOptions } from './Types';
 
+const globalStackInstancesKey = Symbol.for('GlobalStack');
+
 export default class Modals {
-  static globalStackInstances = new Map<string, ModalStack>();
+  static globalStackInstances =
+    window[globalStackInstancesKey] || (window[globalStackInstancesKey] = new Map<string, ModalStack>());
 
   /**
    * Creates a stack instance with the given name
