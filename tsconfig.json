@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es5",
+    "module": "commonjs",
     "strict": false,
+    "declaration": true,                   /* Generates corresponding '.d.ts' file. */
+    "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
@@ -40,4 +42,4 @@
   "exclude": [
     "node_modules"
   ]
-}  
+}

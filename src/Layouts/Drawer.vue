@@ -1,38 +1,37 @@
 <template>
-  <section
-    layout="drawer"
-    :style="{'--depth': depth}">{{depth}}<slot></slot></section>
+  <section layout="drawer" :style="{ '--depth': depth }">
+    <slot></slot>
+  </section>
 </template>
 
 <script lang="ts">
-import { Modal } from '@/Types';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Modal } from '../Types';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class LayoutDrawer extends Vue {
   @Prop()
-  readonly stack: Modal[]
+  readonly stack: Modal[];
 
   @Prop()
-  readonly index: number
+  readonly index: number;
 
   @Prop()
-  readonly modal: Modal
+  readonly modal: Modal;
 
   get depth() {
-    let drawers = this.stack.filter(s => s.options.layout == 'drawer')
-    let index = drawers.findIndex(m => m == this.modal)
-    return drawers.length - index - 1
+    const drawers = this.stack.filter(s => s.options.layout === 'drawer');
+    const index = drawers.findIndex(m => m === this.modal);
+    return drawers.length - index - 1;
   }
 }
 
 // Register component
-Vue.component('drawer', LayoutDrawer)
+Vue.component('drawer', LayoutDrawer);
 </script>
 <style lang="scss">
-section[layout=drawer] {
+section[layout='drawer'] {
   background: white;
-
   position: absolute;
   top: 0;
   left: 0;
@@ -41,11 +40,20 @@ section[layout=drawer] {
 
   min-width: 300px;
 
-  transition: transform .4s ease-in-out;
-  transform: translateX(max(0px,calc(100vw - 100% - 100px * var(--depth) )));
+  transition: transform 0.4s ease-in-out;
+  transform: translateX(calc(100vw - 100% - 100px * var(--depth)));
 
-  &.modal-enter, &.modal-leave-to {
+  &.modal-enter,
+  &.modal-leave-to {
     transform: translateX(calc(100vw));
+  }
+}
+
+@media (max-width: 768px) {
+  section[layout='drawer'] {
+    width: 100%;
+    height: 100%;
+    position: fixed;
   }
 }
 </style>
