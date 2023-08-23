@@ -11,30 +11,34 @@
 </template>
 
 <script lang="ts">
+import { PropType, defineComponent } from 'vue';
 import { Modal } from '../Types';
-import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
-export default class LayoutDialog extends Vue {
-  @Prop()
-  readonly stack: Modal[];
-
-  @Prop()
-  readonly index: number;
-
-  @Prop()
-  readonly modal: Modal;
-
-  @Prop()
-  readonly showClose: Boolean;
-
-  get classes() {
-    return { center: true };
-  }
-}
-
-// Register component
-Vue.component('dialog', LayoutDialog);
+export default defineComponent({
+  props: {
+    stack: {
+      type: Object as PropType<Modal[]>,
+      readonly: true,
+    },
+    index: {
+      type: Number,
+      readonly: true,
+    },
+    modal: {
+      type: Object as PropType<Modal>,
+      readonly: true,
+    },
+    showClose: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  computed: {
+    classes() {
+      return { center: true };
+    },
+  },
+});
 </script>
 
 <style lang="scss">

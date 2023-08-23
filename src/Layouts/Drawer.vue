@@ -5,29 +5,34 @@
 </template>
 
 <script lang="ts">
+import { PropType, defineComponent } from 'vue';
 import { Modal } from '../Types';
-import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
-export default class LayoutDrawer extends Vue {
-  @Prop()
-  readonly stack: Modal[];
+export default defineComponent({
+  props: {
+    stack: {
+      type: Object as PropType<Modal[]>,
+      readonly: true,
+    },
+    index: {
+      type: Number,
+      readonly: true,
+    },
+    modal: {
+      type: Object as PropType<Modal>,
+      readonly: true,
+    },
+  },
+  computed: {
+    depth() {
+      if (!this.stack) return 0;
 
-  @Prop()
-  readonly index: number;
-
-  @Prop()
-  readonly modal: Modal;
-
-  get depth() {
-    const drawers = this.stack.filter(s => s.options.layout === 'drawer');
-    const index = drawers.findIndex(m => m === this.modal);
-    return drawers.length - index - 1;
-  }
-}
-
-// Register component
-Vue.component('drawer', LayoutDrawer);
+      const drawers = this.stack.filter((s) => s.options.layout === 'drawer');
+      const index = drawers.findIndex((m) => m === this.modal);
+      return drawers.length - index - 1;
+    },
+  },
+});
 </script>
 <style lang="scss">
 section[layout='drawer'] {

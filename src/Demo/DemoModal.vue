@@ -1,6 +1,6 @@
 <template>
   <div :style="{ width: `${width}px` }">
-    <div style="position: sticky; top: 0; z-index: 1; background: white;">
+    <div style="position: sticky; top: 0; z-index: 1; background: white">
       This is a demo modal component.
       <br />
       <button @click="$emit('close')">× Close</button>
@@ -19,34 +19,37 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import Modals from '../Modals';
-export default {
+
+export default defineComponent({
   name: 'DemoModal',
   props: {
     width: {
       type: Number,
-      default: 500
-    }
+      default: 500,
+    },
   },
   data() {
     return {
-      preventClosingFlag: false
+      preventClosingFlag: false,
     };
   },
+
   methods: {
-    async beforeClose(event) {
-      if (this.preventClosingFlag) {
-        event.preventDefault();
-        if ((await Modals.open({ layout: 'drawer', component: 'DemoModal', parent: this })) === 'Banana') {
-          this.$emit('destroy');
-        }
-      }
-    },
+    // async beforeClose(event) {
+    //   if (this.preventClosingFlag) {
+    //     event.preventDefault();
+    //     if ((await Modals.push({ layout: 'drawer', component: 'DemoModal', parent: this })) === 'Banana') {
+    //       this.$emit('destroy');
+    //     }
+    //   }
+    // },
 
     open() {
       Modals.open({ layout: 'drawer', component: 'DemoModal', default: null, parent: this });
-    }
-  }
-};
+    },
+  },
+});
 </script>

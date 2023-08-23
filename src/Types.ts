@@ -1,4 +1,4 @@
-import { VueConstructor } from 'vue/types/umd';
+import { Component, CreateComponentPublicInstance } from 'vue';
 import ModalStack from './ModalStack.vue';
 
 export interface ModalOptions {
@@ -15,7 +15,7 @@ export interface ModalOptions {
    * If not set, will keep the dialog open even if the
    * component who created it was destroyed.
    */
-  parent?: Vue;
+  parent?: Component | CreateComponentPublicInstance;
 
   /**
    * The layout to use as container for the component
@@ -57,18 +57,22 @@ export interface ModalOptions {
   hideOverlay?: boolean;
   clickToClose?: boolean;
 
-  beforeClose?: (Event) => void;
+  beforeClose?: (Event: any) => void;
 }
 
 export interface ModalResult {
   id: number;
-  stack: ModalStack;
+  stack: typeof ModalStack;
   options: ModalOptions;
   /**
    * Component that will render the layout
    */
-  layout: Vue | VueConstructor<Vue> | string;
-  close(error?: any);
-  destroy(error?: any);
+  layout: Component | CreateComponentPublicInstance | string;
+  close(error?: any): void;
+  destroy(error?: any): void;
+
+  Reject: any;
+  Resolve: any;
+  Fulfilled: any;
 }
 export type Modal = Promise<any> & ModalResult;
